@@ -3,16 +3,26 @@
 //em ms, retornando uma nova função que só executa fn se não for
 //chamada novamente dentro do intervalo.
 
-let tempoDeParada = null
+
 function debounce(fn, delay) {
-    clearTimeout(tempoDeParada);
-    tempoDeParada = setTimeout(() => {fn();}, delay);
+    let tempoDeParada = null;
+
+    return function(...args) {
+        clearTimeout(tempoDeParada);
+
+        tempoDeParada = setTimeout(() => {
+            fn.apply(this, args);
+        }, delay);
+    }
 }
 
 function comprimento() {
     console.log("Olá, leitor");
 }
 
-debounce(comprimento, 1000);  
-debounce(comprimento, 3000); 
-debounce(comprimento, 3000);  
+const debouncedComprimento = debounce(comprimento, 1000);
+
+// Teste do debounce
+debouncedComprimento();
+debouncedComprimento();
+debouncedComprimento();
